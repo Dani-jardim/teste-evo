@@ -6,6 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="js/validate.js">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <title>Cadastro Evo</title>
   </head>
   <body>
@@ -15,17 +17,80 @@
         <a href="#" class="header-name">W12</a>
       </nav>
     </header>
+
     <div class="container-register">
       <h1 class="title-register" >Cadastro</h1>
-      <form action="">
+      <form name="check-register" action="" method="POST">
         <p class="title-form">Nome:</p>
-        <input type="text" name="nome" id="" placeholder="Digite seu nome">
+        <input type="text" name="name" id="name-register" placeholder="Digite seu nome">
         <p class="title-form">Email:</p>
-        <input type="email" name="" id="" placeholder="Ex: dani@uol.com.br">
+        <input type="email" name="email" id="email-register" placeholder="Ex: dani@uol.com.br">
         <p class="title-form">Senha:</p>
-        <input type="password" name="" id="" placeholder="Sua senha precisa ter pelo menos 8 caracteres">
-        <button class="button-register">Salvar</button>
+        <input type="password" name="password" id="password-register" placeholder="Sua senha precisa ter pelo menos 8 caracteres">
+        <button class="button-register" onclick="guardarDados()">Salvar</button>
       </form>
     </div>
-  </body>
+
+    <table id="table-results">
+        <tr>
+          <td>Nome</td>
+          <td>email</td>
+          <td>senha</td>
+        </tr>
+      </table>
+
 </html>
+<script>
+
+  var allDados=[];
+  allDados.push(localStorage.getItem("frm"));
+  mostrar();
+
+
+  function guardarDados(){
+    
+    validate();
+    dados= [];
+
+    
+    dados.push(document.getElementById("name-register").value);
+    dados.push ($("#email-register").val());
+    dados.push ($("#password-register").val());
+
+    allDados.push(dados);
+
+    arjson = JSON.stringify(allDados);
+    
+    localStorage.setItem("frm",arjson);
+    erase();
+  
+  }
+
+  function mostrar(){
+    
+    campos = JSON.parse(localStorage.getItem("frm"));
+      for (x=0; x < campos.length; x++){
+
+        $("#table-results").append("<tr> <td> "+campos[x][0]+" </td><br> <td> "+campos[x][1]+" </td> <td> "+campos[x][2]+" </td> <button>VER</button> </tr>");
+
+      }
+  }
+
+  function validate (){
+    password = $("#password-register").val();
+
+  if(password.length < 8){
+    alert("A senha deve ter no minimo 8 caracteres");
+    return false;
+  }
+
+}
+
+function erase(){
+  $("name-register").val("");
+  $("email-register").val("");
+  $("password-register").val("");
+
+}
+  
+</script>
